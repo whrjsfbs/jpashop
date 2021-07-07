@@ -17,6 +17,8 @@ public class ItemRepository {
         if(item.getId() == null) {
             em.persist(item);
         } else  {
+            //사실 이거보면 Dirty Checking을 하도록 변경하라
+            //ItemService의 updateItem API 참고
             em.merge(item);
         }
     }
