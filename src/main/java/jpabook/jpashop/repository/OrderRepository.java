@@ -108,4 +108,25 @@ public class OrderRepository {
         TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대 1000건
         return query.getResultList();
     }
+
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+        ).getResultList();
+    }
+
+    /**
+     * Repository 자체에서 하나의 DTO에 맞춰 만들어진 API라는게 별로 어울리지 않음
+     * 그래서 OrderSimpleQueryRepository로 따로 빼서 옮긴다.
+     */
+//    public List<OrderSimpleQueryDto> findOrderDtos() {
+//        return em.createQuery(
+//                "select new jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto(o.id, m.name, o.orderDate, o.status, d.address)" +
+//                        " from Order o" +
+//                        " join o.member m" +
+//                        " join o.delivery d", OrderSimpleQueryDto.class
+//        ).getResultList();
+//    }
 }

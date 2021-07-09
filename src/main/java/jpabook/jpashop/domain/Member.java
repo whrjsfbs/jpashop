@@ -23,7 +23,7 @@ public class Member {
     @Embedded
     private Address address;
 
-//    @JsonIgnore
+    @JsonIgnore     //이게 있어야 RestController에서 요청하는 Json Data에 대해 무한루프가 걸리지 않음
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
 }
