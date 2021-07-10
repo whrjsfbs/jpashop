@@ -117,8 +117,36 @@ public class OrderRepository {
         ).getResultList();
     }
 
+    //Paging까지 고려한 쿼리 
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                /**
+                 * xToMany 관계에서의 fetch join은 데이터 갯수를 Many에 맞게 뻥튀기함
+                 * 이를 위해 distinct를 사용할 수 있음
+                 * 원래 distinct의 경우 모든 Attributes들이 다 같아야만 중복제거함
+                 * 그러나 JPQL에서는 해당 Entity의 id가 동일할 경우에도 중복제거함
+                 */
+                
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i", Order.class)
+                .getResultList();
+    }
+
     /**
-     * Repository 자체에서 하나의 DTO에 맞춰 만들어진 API라는게 별로 어울리지 않음
+     * Repository 자체에서 하나의 DTO에 맞춰 만들어진 API라는게 별로 어울리지 않음. 뭔가 Frontend View에 딱 맞춰진 느낌...
      * 그래서 OrderSimpleQueryRepository로 따로 빼서 옮긴다.
      */
 //    public List<OrderSimpleQueryDto> findOrderDtos() {

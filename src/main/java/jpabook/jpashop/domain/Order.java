@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,6 +25,13 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
+
+    /**
+     * @BatchSize
+     * in (?,?,?) 조건식으로 100개까지 동시 조회.
+     * hibernate.default_batch_fetch_size로 Global 세팅을 하니 필요할 때만 쓰자
+     */
+    // @BatchSize(size = 100)
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 

@@ -12,6 +12,7 @@ spring:
       hibernate:
 #        show_sql: true
         format_sql: true
+        default_batch_fetch_size: 100  #in (?,?,?) 조건식을 통해 여러 Query로 나갈걸 하나의 Query로 보냄
 
 logging:
   level:

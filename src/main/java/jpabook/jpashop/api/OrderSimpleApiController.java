@@ -32,8 +32,9 @@ public class OrderSimpleApiController {
     /**
      * 문제1: Order가 가진 Member, Member가 가진 Order로 인해 무한루프
      *       => JsonIgnore를 달아서 무한루프를 해결해야함
-     * 문제2: JsonIgnore로 무한루프를 해결해도 Order가 Member를 Lazy하게 Proxt로 가지다가 Jackson라이브러리가 Json으로 해석하는 걸 실패함
+     * 문제2: JsonIgnore로 무한루프를 해결해도 Order가 Member를 Lazy하게 들고 있으면 Member를 Proxy로 가지고 있는데 Jackson라이브러리가 Json으로 해석하는 걸 실패함
      *       => Hibernate5Module을 쓰면 해결됨. Lazy한 멤버변수들은 null로 채움
+     *       => 아니면 Lazy 로딩이 일어나게 만들어서 Member 객체를 받아오게 만들어 해결
      * 결론은... DTO 없이 Entity 자체를 리턴하는건 하지마라.
      */
     @GetMapping("/api/v1/simple-orders")
@@ -59,8 +60,8 @@ public class OrderSimpleApiController {
     /**
      * N+1까지 해결한 Fetch Join
      * (상황에 따라 v3나 v4를 써라)
-     * 장점: Order Entity 자체를 가져오기에 가져온 데이터를 바탕으로 원하는 DTO로 변경하여 사용 가능. 재사용성이 좋음
-     * 단점: 모든 데이터를 가져오기 때문에 성능이 v4보다는 약간 낮음(사실 거의 안남)
+     * [장점]: Order Entity 자체를 가져오기에 가져온 데이터를 바탕으로 원하는 DTO로 변경하여 사용 가능. 재사용성이 좋음
+     * [단점]: 모든 데이터를 가져오기 때문에 성능이 v4보다는 약간 낮음(사실 거의 안남)
      * v4보다 v3를 더 추천
      */
     @GetMapping("/api/v3/simple-orders")
@@ -73,8 +74,8 @@ public class OrderSimpleApiController {
     /**
      * Fetch Join을 하여 Query할 때 DTO 형태로 바로 Query하도록 만들어보자
      * (상황에 따라 v3나 v4를 써라)
-     * 장점: Fit하게 Query를 요청하기 때문에 성능최적화가 약간 됨
-     * 단점: v4는 해당 DTO에만 딱 맞춰 쓸 수 있기 때문에 재사용성이 떨어짐
+     * [장점]: Fit하게 Query를 요청하기 때문에 성능최적화가 약간 됨
+     * [단점]: v4는 해당 DTO에만 딱 맞춰 쓸 수 있기 때문에 재사용성이 떨어짐
      */
     @GetMapping("/api/v4/simple-orders")
     public List<OrderSimpleQueryDto> orderV4() {
