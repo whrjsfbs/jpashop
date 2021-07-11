@@ -79,10 +79,10 @@ public class OrderApiController {
     }
 
     /**
-     * xToMany Fetch Join은 제거함
-     * hibernate.default_batch_fetch_size를 통해 in (?,?,?) 조건식이 나가도록 함
+     * xToMany Fetch Join은 제거하고 in 절로 한번에 여러개 가져오도록 함
+     * hibernate.default_batch_fetch_size를 통해 in 절이 나가도록 함
      * 물론 Fetch Join으로 한방에 가져오는게 더 빠르겠지만,
-     * in 조건식을 이용하면 1 + N => 1 + 1로 복잡도가 줄어듦
+     * in 절을 이용하면 1 + N => 1 + 1로 복잡도가 줄어듦
      * (v3, v3.1 장단점을 따져 써라)
      * [장점]: Paging 가능, in 조건식을 통해 어느정도 최적화가 된다.
      * [단점]: 한방 쿼리정도는 아니다.

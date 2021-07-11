@@ -13,6 +13,7 @@ spring:
 #        show_sql: true
         format_sql: true
         default_batch_fetch_size: 100  #in (?,?,?) 조건식을 통해 여러 Query로 나갈걸 하나의 Query로 보냄
+#    open-in-view: false #고객의 짧은 실시간 서비스 API는 OSIV를 끄고, ADMIN같이 커넥션이 많이 필요 없는 것은 OSIV를 키자.
 
 logging:
   level:
